@@ -1,0 +1,16 @@
+pandas
+numpy
+fastAPI
+uvicorn
+scikit-learn
+torch
+tqdm
+beautifulsoup4
+xgboost
+scipy
+python-multipart
+requests
+redis
+websockets
+fuzzywuzzy
+python-Levenshtein

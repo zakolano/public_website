@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if apply_button %}
+    <title>Results</title>
+    {% else %}
+    <title>Predictions</title>
+    {% endif %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles_og.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='new_styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-size: 17px; /* Decrease body font size by 4 pixels */
+        }
+        .small-table {
+            background-color: transparent;
+            border-collapse: collapse;
+            width: 140px;
+            font-size: 11px; /* Decrease font size by 4 pixels */
+        }
+        .small-table td, .small-table th {
+            background-color: transparent;
+            border: none;
+            padding: 2px 5px; /* Adjust padding to reduce whitespace */
+            line-height: 1; /* Adjust line-height to reduce whitespace */
+            text-align: center; /* Center justify text */
+        }
+        .small-table th {
+            font-size: 16px; /* Adjust font size for "Score" text */
+        }
+        .small-table td[colspan="1"] {
+            font-size: 20px; /* Adjust font size for actual score */
+        }
+        .bracket-container {
+            transform: translateY(-20px); /* Translate up by 20 pixels */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .centered-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%; /* Ensure it takes full width */
+        }
+        .centered-content2 {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding-right: 20px;
+        }
+        .text-center {
+            margin: 0 auto;
+            position: absolute;
+            left: 632px;
+        }
+        .results-table-container {
+            position: absolute;
+            left: 609px;
+            top: 30px;
+            color: #000000;
+            text-align: left;
+            font-family: "Inter-Medium", sans-serif;
+            font-size: 16px;
+            line-height: 150%;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+        <a href="{{ redirect_url }}" class="btn btn-danger mt-2">Go Back</a>
+    </div>
+    {% else %}
+        <div class="yurrr">
+            <div class="bracket-container">
+                <h3 class="text-center">Results</h3>
+                {% include 'asdas.html' %}
+                <div class="centered-content">
+                    {% if apply_button %}
+                    <div class="results-table-container">
+                        <table class="table small-table">
+                            <thead>
+                                <tr>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="font-size: 20px;">
+                                    <td>{{ bracket_score }}</td>
+                                </tr>
+                                {% for round, count in round_correct.items() %}
+                                <tr>
+                                    <td>{{ round }}: {{ count }} / {% if round == 'Round of 32' %}32{% elif round == 'Sweet Sixteen' %}16{% elif round == 'Elite Eight' %}8{% elif round == 'Final Four' %}4{% elif round == 'Finals' %}2{% elif round == 'Winner' %}1{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                    {% if scores %}
+                    {% for score in scores %}
+                    <div class="score_prob_text" style="position: absolute; left: {{ score.left }}px; top: {{ score.top }}px;">
+                        <div class="score">{{ score.Score }}</div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if probs %}
+                    {% for prob in probs %}
+                    <div class="score_prob_text" style="position: absolute; left: {{ prob.left }}px; top: {{ prob.top }}px;">
+                        <div class="score">{{ prob.Prob | round(2) }}%</div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if groups %}
+                    {% for group in groups %}
+                    <div class="{{ group.group }}" style="position: absolute; left: {{ group.left }}px; top: {{ group.top }}px;">
+                        <div class="rectangle"></div>
+                        <div class="seed">{{ group.Seed }}</div>
+                        <div class="Team">{{ group.Team }}</div>
+                        <div class="line"></div>
+                        <div class="ellipse"></div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+            </div>
+        {% endif %}
+    </div>
+    {% if apply_button %}
+    <div class="centered-content2">
+        <a href="/applied_model" class="btn btn-primary mt-3">Apply Model</a>
+    </div>
+    {% endif %}
+</body>
+
+</html>

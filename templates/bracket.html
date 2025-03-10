@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>March Madness Bracket</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    <h1>March Madness Bracket</h1>
+    <form method="post" action="{{ url_for('post_bracket') }}">
+        <label for="year">Select Year:</label>
+        <select name="year" id="year">
+            {% for year in years %}
+            <option value="{{ year }}" {% if year == selected_year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    <form method="post" action="{{ url_for('predict') }}">
+        <input type="hidden" name="bitstring" value="your_bitstring_here">
+        <button type="submit">Predict</button>
+    </form>
+    <div class="bracket-container">
+        <img src="{{ url_for('static', path='img.jpg') }}" alt="Bracket" class="bracket-image">
+        
+        {% if teams %}
+        {% for team in teams %}
+        <div class="team" id="team-{{ loop.index }}" style="top: '{{ team.top }}%'; left: '{{ team.left }}%';">
+            <span class="{% if team.match %}green{% else %}red{% endif %}">{{ team.Team1 }}</span>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>

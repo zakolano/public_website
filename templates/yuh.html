@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Selection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="container my-4">
+        <h2 class="text-center">Model Selection</h2>
+        <form method="post" action="/results" onsubmit="return validateForm()">
+            <div class="mb-4">
+                <label for="prediction_method" class="form-label">Select Prediction Method:</label>
+                <select name="prediction_method" id="prediction_method" class="form-select" required>
+                    <option value="">Select a method</option>
+                    <option value="score" {% if selected_method=='score' %}selected{% endif %}>Score</option>
+                    <option value="winner" {% if selected_method=='winner' %}selected{% endif %}>Winner</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="model_type" class="form-label">Select Model:</label>
+                <select name="model_type" id="model_type" class="form-select"
+                    onchange="updateHyperparameters(this.value)" required>
+                    <option value="">Select a model</option>
+                    <option value="neural_network" {% if selected_model=='neural_network' %}selected{% endif %}>Neural
+                        Network</option>
+                    <option value="decision_tree" {% if selected_model=='decision_tree' %}selected{% endif %}>Decision
+                        Tree</option>
+                    <option value="linear_regression" {% if selected_model=='linear_regression' %}selected{% endif %}>
+                        Linear Regression</option>
+                    <option value="k_nearest" {% if selected_model=='k_nearest' %}selected{% endif %}>Nearest Neighbors
+                    </option>
+                    <option value="xg_boost" {% if selected_model=='xg_boost' %}selected{% endif %}>XG Boost</option>
+                    <option value="random_forest" {% if selected_model=='random_forest' %}selected{% endif %}>Random
+                        Forest</option>
+
+
+                    <!-- Add more models as needed -->
+                </select>
+            </div>
+            <div id="hyperparameters" class="mb-4">
+                <!-- Dynamic hyperparameter fields will be inserted here -->
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function updateHyperparameters(model, pred) {
+            const hyperparametersDiv = document.getElementById('hyperparameters');
+            hyperparametersDiv.innerHTML = ''; // Clear existing fields
+
+            if (model === 'neural_network') {
+                hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="learning_rate" class="form-label">Learning Rate:</label>
+                    <input type="number" step="0.00001" name="learning_rate" id="learning_rate" class="form-control" value="{{ hyperparameters.learning_rate | default(0.00001) }}" min="0.00001" required>
+                </div>
+                <div class="mb-3">
+                    <label for="epochs" class="form-label">Epochs:</label>
+                    <input type="number" step = 1 name="epochs" id="epochs" class="form-control" value="{{ hyperparameters.epochs | default(100) }}" min = "10" max = "2000" required>
+                </div>
+            `;
+            } else if (model === 'decision_tree') {
+                if (pred == 'score') {
+                    hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="max_depth" class="form-label">Max Depth:</label>
+                    <input type="number" name="max_depth" id="max_depth" class="form-control" value="{{ hyperparameters.max_depth | default(5) }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="min_samples_split" class="form-label">Min Samples Split:</label>
+                    <input type="number" name="min_samples_split" id="min_samples_split" class="form-control" value="{{ hyperparameters.min_samples_split | default(2) }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="criterion" class="form-label">Loss Function:</label>
+                    <select name="criterion" id="criterion" class="form-select" required>
+                        <option value="squared_error" {% if hyperparameters.criterion == 'squared_error' %}selected{% endif %}>Squared Error selected = "selected"</option>
+                        <option value="absolute_error" {% if hyperparameters.criterion == 'absolute_error' %}selected{% endif %}>Absolute Error</option>
+                        <option value="friedman_mse" {% if hyperparameters.criterion == 'friedman_mse' %}selected{% endif %}>Friedman MSE</option>
+                        <option value="poisson" {% if hyperparameters.criterion == 'poisson' %}selected{% endif %}>Poisson Deviance</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                </div>
+            `;
+                }
+                else {
+                    hyperparametersDiv.innerHTML = `
+                    <div class="mb-3">
+                        <label for="max_depth" class="form-label">Max Depth:</label>
+                        <input type="number" name="max_depth" id="max_depth" class="form-control" value="{{ hyperparameters.max_depth | default(5) }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="min_samples_split" class="form-label">Min Samples Split:</label>
+                        <input type="number" name="min_samples_split" id="min_samples_split" class="form-control" value="{{ hyperparameters.min_samples_split | default(2) }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="criterion" class="form-label">Loss Function:</label>
+                        <select name="criterion" id="criterion" class="form-select" required>
+                            <option value="gini" {% if hyperparameters.criterion == 'gini' %}selected{% endif %}>Gini</option>
+                            <option value="log_loss" {% if hyperparameters.criterion == 'log_loss' %}selected{% endif %}>Log Loss</option>
+                            <option value="entropy" {% if hyperparameters.criterion == 'entropy' %}selected{% endif %}>Entropy Loss</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="num_models" class="form-label">Number of Models:</label>
+                        <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                    </div>
+                `;
+                }
+            } else if (model === 'linear_regression') {
+                hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="fit_intercept" class="form-label">Fit Intercept:</label>
+                    <select name="fit_intercept" id="fit_intercept" class="form-select" required>
+                        <option value="true" {% if hyperparameters.fit_intercept == 'true' %}selected{% endif %}>True</option>
+                        <option value="false" {% if hyperparameters.fit_intercept == 'false' %}selected{% endif %}>False</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "100" required>
+                </div>
+            `;
+            }
+            else if (model === 'k_nearest') {
+                hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="n_neighbors" class="form-label">Value of K:</label>
+                    <input type="number" step = 1 name="n_neighbors" id="n_neighbors" class="form-control" value="{{ hyperparameters.n_neighbors | default(3) }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="k_weights" class="form-label">Weight Metric:</label>
+                    <select name="k_weights" id="k_weights" class="form-select" required>
+                        <option value="uniform" {% if hyperparameters.k_weights == 'uniform' %}selected{% endif %}>Uniform</option>
+                        <option value="distance" {% if hyperparameters.k_weights == 'distance' %}selected{% endif %}>Distance</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                </div>
+            `;
+            }
+            else if (model === 'xg_boost') {
+                hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="learning_rate" class="form-label">Learning Rate:</label>
+                    <input type="number" step="0.00001" name="learning_rate" id="learning_rate" class="form-control" value="{{ hyperparameters.learning_rate | default(0.00001) }}" min="0.00001" required>
+                </div>
+                <div class="mb-3">
+                    <label for="n_estimators" class="form-label">Num Estimators:</label>
+                    <input type="number" step = 1 name="n_estimators" id="n_estimators" class="form-control" value="{{ hyperparameters.num_estimators | default(100) }}" min = "10" max = "500" required>
+                </div>
+                <div class="mb-3">
+                    <label for="max_depth" class="form-label">Max Depth:</label>
+                    <input type="number" step = 1 name="max_depth" id="max_depth" class="form-control" value="{{ hyperparameters.max_depth | default(7) }}" min = "2" max = "20" required>
+                </div>
+                <div class="mb-3">
+                    <label for="loss_function" class="form-label">Loss Function:</label>
+                    <select name="loss_function" id="loss_function" class="form-select" required>
+                        <option value="reg:squarederror" {% if hyperparameters.loss_function == 'reg:squarederror' %}selected{% endif %}>Squared Error</option>
+                        <option value="reg:logistic" {% if hyperparameters.loss_function == 'reg:logistic' %}selected{% endif %}>Logistic Regression</option>
+                        <option value="reg:absoluteerror" {% if hyperparameters.loss_function == 'reg:absoluteerror' %}selected{% endif %}>Absolute Error</option>
+                        <option value="count:poisson" {% if hyperparameters.loss_function == 'count:poisson' %}selected{% endif %}>Poisson Regression</option>
+                        <option value="survival:cox" {% if hyperparameters.loss_function == 'survival:cox' %}selected{% endif %}>Cox Proportional Hazards</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                </div>
+            `;
+            }
+            else if (model === 'random_forest') {
+                if (pred == 'score') {
+                    hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="n_estimators" class="form-label">Num Estimators:</label>
+                    <input type="number" step = 1 name="n_estimators" id="n_estimators" class="form-control" value="{{ hyperparameters.n_estimators | default(100) }}" min = "10" max = "500" required>
+                </div>
+                <div class="mb-3">
+                    <label for="max_depth" class="form-label">Max Depth:</label>
+                    <input type="number" step = 1 name="max_depth" id="max_depth" class="form-control" value="{{ hyperparameters.max_depth | default(7) }}" min = "2" max = "20" required>
+                </div>
+                <div class="mb-3">
+                    <label for="criterion" class="form-label">Loss Function:</label>
+                    <select name="criterion" id="criterion" class="form-select" required>
+                        <option selected = "selected" value="squared_error" {% if hyperparameters.criterion == 'squared_error' %}selected{% endif %}>Squared Error</option>
+                        <option value="absolute_error" {% if hyperparameters.criterion == 'absolute_error' %}selected{% endif %}>Absolute Error</option>
+                        <option value="friedman_mse" {% if hyperparameters.criterion == 'friedman_mse' %}selected{% endif %}>Friedman MSE</option>
+                        <option value="poisson" {% if hyperparameters.criterion == 'poisson' %}selected{% endif %}>Poisson Deviance</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                </div>
+            `;
+                }
+                else {
+                    hyperparametersDiv.innerHTML = `
+                <div class="mb-3">
+                    <label for="n_estimators" class="form-label">Num Estimators:</label>
+                    <input type="number" step = 1 name="n_estimators" id="n_estimators" class="form-control" value="{{ hyperparameters.n_estimators | default(100) }}" min = "10" max = "500" required>
+                </div>
+                <div class="mb-3">
+                    <label for="max_depth" class="form-label">Max Depth:</label>
+                    <input type="number" step = 1 name="max_depth" id="max_depth" class="form-control" value="{{ hyperparameters.max_depth | default(7) }}" min = "2" max = "20" required>
+                </div>
+                <div class="mb-3">
+                    <label for="criterion" class="form-label">Loss Function:</label>
+                    <select name="criterion" id="criterion" class="form-select" required>
+                            <option value="gini" {% if hyperparameters.criterion == 'gini' %}selected{% endif %}>Gini</option>
+                            <option value="log_loss" {% if hyperparameters.criterion == 'log_loss' %}selected{% endif %}>Log Loss</option>
+                            <option value="entropy" {% if hyperparameters.criterion == 'entropy' %}selected{% endif %}>Entropy Loss</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="num_models" class="form-label">Number of Models:</label>
+                    <input type="number" step="1" name="num_models" id="num_models" class="form-control" value="{{ hyperparameters.num_models | default(1) }}" min="1" max = "10" required>
+                </div>
+            `;
+                }
+            }
+        }
+
+        function validateForm() {
+            const modelType = document.getElementById('model_type').value;
+            if (!modelType) {
+                alert('Please select a model type.');
+                return false;
+            }
+
+            const hyperparametersDiv = document.getElementById('hyperparameters');
+            const inputs = hyperparametersDiv.querySelectorAll('input, select');
+            for (const input of inputs) {
+                if (!input.value) {
+                    alert('Please fill out all hyperparameter fields.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // Call updateHyperparameters to pre-fill the hyperparameters when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectedModel = document.getElementById('model_type').value;
+            const selectedMethod = document.getElementById('prediction_method').value;
+            if (selectedModel && selectedMethod) {
+                updateHyperparameters(selectedModel, selectedMethod);
+            }
+        });
+    </script>
+</body>
+
+</html>

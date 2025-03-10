@@ -1,0 +1,367 @@
+cbb_name,id
+abilene christian,2000
+air force,2005
+akron,2006
+alabama,333
+alabama am,2010
+alabama state,2011
+albany ny,399
+alcorn state,2016
+american university,44
+app state,2026
+arizona,12
+arizona state,9
+arkansas,8
+arkansas state,2032
+arkansas pine bluff,2029
+army,349
+auburn,2
+austin peay,2046
+ball state,2050
+baylor,239
+bellarmine,91
+belmont,2057
+bethune cookman,2065
+binghamton,2066
+boise state,68
+boston college,103
+boston university,104
+bowling green state,189
+bradley,71
+BYU,252
+brown,225
+bryant,2803
+bucknell,2083
+buffalo,2084
+butler,2086
+cal poly,13
+cal state bakersfield,2934
+cal state fullerton,2239
+cal state northridge,2463
+california,25
+california baptist,2856
+campbell,2097
+canisius,2099
+central arkansas,2110
+central connecticut state,2115
+central michigan,2117
+charleston southern,2127
+charlotte,2429
+chattanooga,236
+chicago state,2130
+cincinnati,2132
+clemson,228
+cleveland state,325
+coastal carolina,324
+colgate,2142
+college of charleston,232
+colorado,38
+colorado state,36
+columbia,171
+uconn,41
+coppin state,2154
+cornell,172
+creighton,156
+dartmouth,159
+davidson,2166
+dayton,2168
+delaware,48
+delaware state,2169
+denver,2172
+depaul,305
+detroit mercy,2174
+drake,2181
+drexel,2182
+duke,150
+duquesne,2184
+east carolina,151
+ETSU,2193
+East Texas A&M,2837
+E illinois,2197
+E kentucky,2198
+E michigan,2199
+E washington,331
+elon,2210
+evansville,339
+fairfield,2217
+fairleigh dickinson,161
+florida,57
+florida am,50
+FAU,2226
+FGCU,526
+florida international,2229
+florida state,52
+fordham,2230
+fresno state,278
+furman,231
+gardner webb,2241
+george mason,2244
+georgE washington,45
+georgetown,46
+georgia,61
+georgia southern,290
+georgia state,2247
+georgia tech,59
+gonzaga,2250
+grambling,2755
+grand canyon,2253
+green bay,2739
+hampton,2261
+harvard,108
+hawaii,62
+high point,2272
+hofstra,2275
+holy cross,107
+houston,248
+houston baptist,2277
+howard,47
+idaho,70
+idaho state,304
+illinois,356
+illinois state,2287
+UIC,82
+incarnate word,2916
+indiana,84
+indiana state,282
+iona,314
+iowa,2294
+iowa state,66
+iu indianapolis,85
+jackson state,2296
+jacksonville,294
+jacksonville state,55
+james madison,256
+kansas,2305
+missouri kansas city,140
+kansas state,2306
+kennesaw state,338
+kent state,2309
+kentucky,96
+la salle,2325
+lafayette,322
+lamar,2320
+le moyne,2330
+lehigh,2329
+liberty,2335
+lindenwood,2815
+lipscomb,288
+arkansas little rock,2031
+long beach state,299
+long island university,112358
+longwood,2344
+lafayette,322
+LSU,99
+louisiana tech,2348
+UL Monroe,2433
+louisville,97
+Loyola Chicago,2350
+loyola md,2352
+loyola marymount,2351
+maine,311
+manhattan,2363
+marist,2368
+marquette,269
+marshall,276
+maryland,120
+UMBC,2378
+maryland E shore,2379
+UMass,113
+UMass lowell,2349
+mcneese,2377
+memphis,235
+mercer,2382
+mercyhurst,2385
+merrimack,2771
+miami fl,2390
+miami oh,193
+michigan,130
+michigan state,127
+MTSU,2393
+milwaukee,270
+minnesota,135
+Ole Miss,145
+Mississippi State,344
+Ole Miss valley state,2400
+missouri,142
+missouri state,2623
+monmouth,2405
+montana,149
+montana state,147
+morehead state,2413
+morgan state,2415
+mount st marys,116
+murray state,93
+navy,2426
+NC State,152
+nebraska,158
+nevada,2440
+UNLV,2439
+new hampshire,160
+new mexico,167
+new mexico state,166
+new orleans,2443
+niagara,315
+nicholls state,2447
+njit,2885
+norfolk state,2450
+north alabama,2453
+north carolina,153
+NC A&T,2448
+NC Central,2428
+north dakota,155
+N Dakota St,2449
+north florida,2454
+north texas,249
+NorthE,111
+N arizona,2464
+N colorado,2458
+N illinois,2459
+N iowa,2460
+N kentucky,94
+northwestern,77
+N'Western St,2466
+notre dame,87
+oakland,2473
+ohio,195
+ohio state,194
+oklahoma,201
+oklahoma state,197
+old dominion,295
+omaha,2437
+oral roberts,198
+oregon,2483
+oregon state,204
+pacific,279
+penn state,213
+UPenn,219
+pepperdine,2492
+pittsburgh,221
+portland,2501
+portland state,2502
+prairie view,2504
+presbyterian,2506
+princeton,163
+providence,2507
+purdue,2509
+Purdue Fort Wayne,2870
+queens nc,2511
+quinnipiac,2514
+radford,2515
+rhode island,227
+rice,242
+richmond,257
+rider,2520
+robert morris,2523
+rutgers,164
+sacramento state,16
+sacred heart,2529
+saint francis pa,2598
+saint josephs,2603
+saint louis,139
+saint marys ca,2608
+saint peters,2612
+sam houston state,2534
+samford,2535
+san diego,301
+san diego state,21
+san francisco,2539
+san jose state,23
+santa clara,2541
+seattle,2547
+seton hall,2550
+siena,2561
+south alabama,6
+south carolina,2579
+south carolina state,2569
+south carolina upstate,2908
+south dakota,233
+south dakota state,2571
+south florida,58
+southeast missouri state,2546
+southE louisiana,2545
+southern,2582
+USC,30
+southern illinois,79
+SIU Edwardsville,2565
+southern indiana,88
+SMU,2567
+southern Ole Miss,2572
+southern utah,253
+st bonaventure,179
+st johns ny,2599
+st thomas mn,2900
+stanford,24
+stephen f austin,2617
+stetson,56
+stonehill,284
+stony brook,2619
+syracuse,183
+tarleton state,2627
+TCU,2628
+temple,218
+tennessee,2633
+tennessee state,2634
+tennessee tech,2635
+UT Martin,2630
+texas,251
+texas am,245
+texas am corpus christi,357
+texas southern,2640
+texas state,326
+texas tech,2641
+texas pan american university,292
+citadel,2643
+toledo,2649
+towson,119
+troy,2653
+tulane,2655
+tulsa,202
+UAB,5
+UC Davis,302
+UC Irvine,300
+california riverside,27
+california san diego,28
+california santa barbara,2540
+UCF,2116
+ucla,26
+UNC Ashevilleeville,2427
+UNC greensboro,2430
+UNC wilmington,350
+texas arlington,250
+utah,254
+utah state,328
+Utah Tech,3101
+utah valley,3084
+UTEP,2638
+UTSA,2636
+valparaiso,2674
+vanderbilt,238
+vermont,261
+villanova,222
+virginia,258
+VCU,2670
+VMI,2678
+virginia tech,259
+wagner,2681
+wake forest,154
+washington,264
+washington state,265
+weber state,2692
+west georgia,2698
+west virginia,277
+western carolina,2717
+western illinois,2710
+western kentucky,98
+western michigan,2711
+wichita state,2724
+william mary,2729
+winthrop,2737
+wisconsin,275
+wofford,2747
+wright state,2750
+wyoming,2751
+xavier,2752
+yale,43
+youngstown state,2754
+hartford,42
+louisiana,309

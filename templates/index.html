@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    :root {
+        --params-per-line: 5;
+        /* Change this value to adjust the number of parameters per line */
+    }
+
+    .parameter-container {
+        display: grid;
+        grid-template-columns: repeat(var(--params-per-line), 1fr);
+        gap: 8px;
+    }
+
+    .form-check {
+        margin-bottom: 3rem;
+        border-width: 10px;
+        size: .7rem;
+    }
+
+    .form-check-input {
+        margin-left: 5px;
+    }
+
+    .section-check {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+    .selectors {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .section-header {
+        font-size: 1.1rem;
+        /* Reduced size by 20% */
+    }
+
+    .form-check-label {
+        font-size: 1rem;
+        /* Reduced size by 20% */
+    }
+
+    .sub-parameters .form-check-label {
+        font-size: 0.8rem;
+        /* Reduced size by 20% */
+    }
+
+    @media (min-width: 768px) {
+        .table-condensed tbody tr {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .table-condensed tbody tr td {
+            flex: 1 1 50%;
+            max-width: 50%;
+        }
+    }
+    @media (max-width: 767px) {
+        :root {
+            --params-per-line: 2;
+        }
+
+        .selectors {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .fixed-submit-button {
+            position: static;
+            transform: none;
+            margin-top: 20px;
+        }
+    }
+
+    .fixed-submit-button {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+    .modal-content {
+        font-family: "Inter-Medium", sans-serif;
+        font-size: 16px;
+        line-height: 150%;
+    }
+
+    .info-icon {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 20px;
+        z-index: 1050;
+        /* Ensure it is above other elements */
+    }
+
+    .modal-lg {
+        max-width: 80%;
+        /* Adjust this value as needed */
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parameter Selection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <!-- Question Mark Icon -->
+    <div class="info-icon" onclick="showWelcomeModal()">
+        ?
+    </div>
+    {% include 'navbar.html' %}
+    <div class="container my-4">
+        <!-- Year Selection -->
+        <h2 class="text-center">Parameter Selection</h2>
+        <form method="post" action="/save_parameters">
+            <div class="mb-4 selectors">
+                <div>
+                    <label for="year" class="form-label">Select Year:</label>
+                    <select name="year" id="year" class="form-select">
+                        {% for y in years %}
+                        <option value="{{ y }}" {% if y==selected_year %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="margin-left: auto;">
+                    <label for="preset" class="form-label">Select Preset:</label>
+                    <select name="preset" id="preset" class="form-select" onchange="applyPreset(this.value)">
+                        <option value="">None</option>
+                        <option value="all">All</option>
+                        {% for preset in saved_parameter_sets %}
+                        <option value="{{ preset.name }}" {% if preset.name == selected_preset %}selected{% endif %}>{{ preset.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px; align-items: center;">
+                    <button type="button" class="btn btn-secondary" onclick="randomizeSelection()">Randomize</button>
+                    <button type="button" class="btn btn-primary" onclick="saveParameters()">Save Parameters</button>
+                    <button type="button" class="btn btn-danger" onclick="deletePreset()">Delete Preset</button>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Data Parameters -->
+                <div class="col-md-12">
+                    <h4>Data Parameters</h4>
+                    {% for section, parameters in data_parameters.items() %}
+                    <div class="mb-5">
+                        <label class="form-label section-header">{{ section_display_names[section] }}:</label>
+                        <span class="section-check" style="float: right;">
+                            <input type="checkbox" name="sections" value="All" id="{{ section }}-all"
+                                class="form-check-input" onclick="toggleSection('{{ section }}', this)">
+                            <label for="{{ section }}-all" class="form-check-label">Select All</label>
+                        </span>
+                        <div class="parameter-container">
+                            {% for param in parameters %}
+                            <div class="form-check">
+                                <input type="checkbox" name="features" value="{{ param }}" id="{{ param }}"
+                                    class="form-check-input {{ section }}"
+                                    onclick="toggleSubParameters('{{ param }}', this)" {% if param in
+                                    selected_parameters %}checked{% endif %}>
+                                <label for="{{ param }}" class="form-check-label">{{ variable_display_names[param]
+                                    }}</label>
+                                <div class="sub-parameters" style="display: flex; gap: 8px; margin-left: 10px;">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="features" value="{{ param }}" id="{{ param }}_N"
+                                            class="form-check-input {{ section }}" {% if param in selected_parameters
+                                            %}checked{% endif %}>
+                                        <label for="{{ param }}_N" class="form-check-label">N</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="features" value="{{ param }}_D" id="{{ param }}_D"
+                                            class="form-check-input {{ section }}" {% if param ~ '_D' in
+                                            selected_parameters %}checked{% endif %}>
+                                        <label for="{{ param }}_D" class="form-check-label">_D</label>
+                                    </div>
+                                    {% if param in sd_parameters %}
+                                    <div class="form-check">
+                                        <input type="checkbox" name="features" value="{{ param }}_SD"
+                                            id="{{ param }}_SD" class="form-check-input {{ section }}" {% if param
+                                            ~ '_SD' in selected_parameters %}checked{% endif %}>
+                                        <label for="{{ param }}_SD" class="form-check-label">_SD</label>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="fixed-submit-button">
+                <button type="submit" class="btn btn-primary mt-4">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content custom-modal">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title w-100 fw-bold">Welcome</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center fs-5">Welcome to the Bracket Generator!</p>
+                    <p>This consists of <strong>3 pages</strong>: <em>Parameter Selection, Model Selection, and Results.</em></p>
+                    <ul>
+                        <li><strong>Parameter Selection</strong>: Choose the stat distributions for model training.</li>
+                        <li><code>_N</code>: Normal stats (uses the stat for both teams).</li>
+                        <li><code>_D</code>: Difference (Team1 - Team2).</li>
+                        <li><code>_SD</code>: Smart Difference (e.g., Team1's ORtg vs Team2's DRtg).</li>
+                    </ul>
+                    <p>If unsure, selecting all options won't hurt!</p>
+                    <p class="text-center mt-4">More instructions on the next page. <br><strong>Hope you enjoy!</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if({{ show_modal | tojson }}){
+                var welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+                welcomeModal.show();
+            }
+
+            // Apply the selected preset on page load
+            const selectedPreset = "{{ selected_preset }}";
+            console.log(`Toggling sub-parameters for: ${selectedPreset}`);
+            if (selectedPreset) {
+                applyPreset(selectedPreset);
+            }
+
+            // Add event listeners to all checkboxes to log their IDs on click
+            // document.querySelectorAll('.form-check-input').forEach(cb => {
+            //     cb.addEventListener('click', function() {
+            //         //console.log(`Checkbox clicked: ${cb.id}`);
+            //     });
+            // });
+        });
+
+
+        function showWelcomeModal() {
+            var welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+            welcomeModal.show();
+        }
+
+        function toggleSection(section, checkbox) {
+            console.log(`Toggling section: ${section}, checked: ${checkbox.checked}`);
+            const checkboxes = document.querySelectorAll(`.${section}`);
+            checkboxes.forEach(cb => {
+                cb.checked = checkbox.checked;
+                //console.log(`Toggling sub-parameters for: ${cb.id}`);
+                toggleSubParameters(cb.id, cb);
+            });
+        }
+
+        function toggleSubParameters(param, checkbox) {
+            //console.log(`Toggling sub-parameters for: ${param}, checked: ${checkbox.checked}`);
+            const subCheckboxes = [
+                document.getElementById(`${param}_N`),
+                document.getElementById(`${param}_D`),
+                document.getElementById(`${param}_SD`)
+            ];
+
+            subCheckboxes.forEach(cb => {
+                if (cb) {
+                    cb.checked = checkbox.checked;
+                    //console.log(`Sub-parameter: ${cb.id}, checked: ${cb.checked}`);
+                }
+            });
+        }
+
+        function applyPreset(preset) {
+            console.log(`Applying preset: ${preset}`);
+            const presets = {
+                preset1: ['DRtg_REF', 'BPId_BPI', 'AdjD_KEN'],
+                preset2: ['Pace_REF', 'ORB%_REF', 'GP_REF2'],
+                all: Array.from(document.querySelectorAll('.form-check-input')).map(cb => cb.id),
+            };
+            {% for preset in saved_parameter_sets %}
+            presets["{{ preset.name }}"] = {{ preset.parameters | tojson }};
+            {% endfor %}
+            document.querySelectorAll('.form-check-input').forEach(cb => {
+                cb.checked = false;
+            });
+
+            if (presets[preset]) {
+                presets[preset].forEach(param => {
+                    const checkbox = document.getElementById(param);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        console.log(`Checking parameter: ${param}`);
+                        toggleSubParameters(param, checkbox);
+                    }
+                });
+            }
+        }
+
+        function getRandomSubset(array) {
+            // Filter elements ending with _N, _D, or _SD
+            const singleSelectors = array.filter(id => id.endsWith('_N') || id.endsWith('_D') || id.endsWith('_SD'));
+            //console.log(singleSelectors);
+            // Determine the size of the subset (at least 1, up to the length of the filtered array)
+            const subsetSize = Math.floor(Math.random() * singleSelectors.length) + 1;
+
+            // Shuffle the array and take the first 'subsetSize' elements
+            for (let i = singleSelectors.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [singleSelectors[i], singleSelectors[j]] = [singleSelectors[j], singleSelectors[i]];
+            }
+            console.log(`Random subset size: ${subsetSize} out of ${singleSelectors.length}`);
+            return singleSelectors.slice(0, subsetSize);
+        }
+
+        function randomizeSelection() {
+            const allCheckboxes = Array.from(document.querySelectorAll('.form-check-input')).map(cb => cb.id);
+            const randomSubset = getRandomSubset(allCheckboxes);
+
+            document.querySelectorAll('.form-check-input').forEach(cb => {
+                cb.checked = false;
+            });
+
+            randomSubset.forEach(param => {
+                const checkbox = document.getElementById(param);
+                if (checkbox) {
+                    checkbox.checked = true;
+                    //console.log(`Randomly checking parameter: ${param}`);
+                    toggleSubParameters(param, checkbox);
+                }
+            });
+        }
+        function saveParameters() {
+            const selectedParameters = Array.from(document.querySelectorAll('.form-check-input:checked')).map(cb => {
+                let param = cb.id;
+                if (param.endsWith('_N')) {
+                    param = param.slice(0, -2); // Remove the '_N' suffix
+                }
+                return param;
+            });
+            const year = document.getElementById('year').value;
+            const presetName = prompt("Enter a name for this set of parameters:");
+            if (presetName) {
+                fetch('/save_parameter_set', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ parameters: selectedParameters, year: year, name: presetName })
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Parameters saved successfully!');
+                        // Update the selected preset and selected parameters in the session data
+                        fetch('/update_selected_preset_and_parameters', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ name: presetName, parameters: selectedParameters })
+                        }).then(response => {
+                            if (response.ok) {
+                                location.reload(); // Reload the page to reflect the new preset in the dropdown
+                            } else {
+                                alert('Failed to update selected preset and parameters.');
+                            }
+                        });
+                    } else {
+                        alert('Failed to save parameters.');
+                    }
+                });
+            }
+        }
+        function deletePreset() {
+            const presetName = document.getElementById('preset').value;
+            if (presetName && confirm(`Are you sure you want to delete the preset "${presetName}"?`)) {
+                fetch('/delete_parameter_set', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: presetName })
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Preset deleted successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to delete preset.');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

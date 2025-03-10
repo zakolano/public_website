@@ -1,0 +1,165 @@
+
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+    }
+    .bracket-container {
+        position: relative;
+        width: 1357px; /* The container scales based on the viewport */
+        /* max-width: 1200px; /* Optional: set a max width */
+    }
+    .bracket-image {
+        width: 100%; /* Ensures the image scales with the container */
+        height: auto;
+    }
+    .team {
+        position: absolute;
+        font-size: .75vw; /* Scales text size relative to viewport width */
+        background: transparent; /* Changed to transparent */
+        text-align: center;
+        transform: translate(-50%, -50%); /* Centers the box */
+    }
+    .team2{
+        position: absolute;
+        font-size: 1vw;
+        background: transparent; /* Changed to transparent */
+        text-align: center;
+        transform: translate(-50%, -50%); /* Centers the box */
+    }
+    .green {
+        color: green;
+    }
+    .red {
+        color: red;
+    }
+    /* Adjust these positions relative to the container */
+    #team-1 { top: 11.5%; left: 5%; }
+    #team-2 { top: 14.5%; left: 5%; }
+    #team-3 { top: 17%; left: 5%; }
+    #team-4 { top: 20%; left: 5%; }
+    #team-5 { top: 22%; left: 5%; }
+    #team-6 { top: 25%; left: 5%; }
+    #team-7 { top: 27.35%; left: 5%; }
+    #team-8 { top: 30.25%; left: 5%; }
+    #team-9 { top: 32.5%; left: 5%; }
+    #team-10 { top: 35.5%; left: 5%; }
+    #team-11 { top: 37.75%; left: 5%; }
+    #team-12 { top: 40.75%; left: 5%; }
+    #team-13 { top: 43%; left: 5%; }
+    #team-14 { top: 46%; left: 5%; }
+    #team-15 { top: 48.35%; left: 5%; }
+    #team-16 { top: 51.65%; left: 5%; }
+    #team-17 { top: 53.65%; left: 5%; }
+    #team-18 { top: 56.85%; left: 5%; }
+    #team-19 { top: 59.65%; left: 5%; }
+    #team-20 { top: 62.5%; left: 5%; }
+    #team-21 { top: 64.65%; left: 5%; }
+    #team-22 { top: 67.5%; left: 5%; }
+    #team-23 { top: 69.75%; left: 5%; }
+    #team-24 { top: 72.8%; left: 5%; }
+    #team-25 { top: 74.95%; left: 5%; }
+    #team-26 { top: 77.5%; left: 5%; }
+    #team-27 { top: 79.85%; left: 5%; }
+    #team-28 { top: 82.75%; left: 5%; }
+    #team-29 { top: 84.9%; left: 5%; }
+    #team-30 { top: 87.85%; left: 5%; }
+    #team-31 { top: 90.45%; left: 5%; }
+    #team-32 { top: 93.5%; left: 5%; }
+    #team-33 { top: 11.5%; left: 94%; }
+    #team-34 { top: 14.5%; left: 94%; }
+    #team-35 { top: 17%; left: 94%; }
+    #team-36 { top: 20%; left: 94%; }
+    #team-37 { top: 22%; left: 94%; }
+    #team-38 { top: 25%; left: 94%; }
+    #team-39 { top: 27.25%; left: 94%; }
+    #team-40 { top: 30.25%; left: 94%; }
+    #team-41 { top: 32.5%; left: 94%; }
+    #team-42 { top: 35.5%; left: 94%; }
+    #team-43 { top: 37.75%; left: 94%; }
+    #team-44 { top: 40.75%; left: 94%; }
+    #team-45 { top: 43%; left: 94%; }
+    #team-46 { top: 46%; left: 94%; }
+    #team-47 { top: 48.35%; left: 94%; }
+    #team-48 { top: 51.45%; left: 94%; }
+    #team-49 { top: 53.65%; left: 94%; }
+    #team-50 { top: 56.75%; left: 94%; }
+    #team-51 { top: 59.65%; left: 94%; }
+    #team-52 { top: 62.5%; left: 94%; }
+    #team-53 { top: 64.5%; left: 94%; }
+    #team-54 { top: 67.5%; left: 94%; }
+    #team-55 { top: 69.75%; left: 94%; }
+    #team-56 { top: 72.8%; left: 94%; }
+    #team-57 { top: 74.75%; left: 94%; }
+    #team-58 { top: 77.5%; left: 94%; }
+    #team-59 { top: 79.75%; left: 94%; }
+    #team-60 { top: 82.75%; left: 94%; }
+    #team-61 { top: 84.7%; left: 94%; }
+    #team-62 { top: 87.8%; left: 94%; }
+    #team-63 { top: 90.25%; left: 94%; }
+    #team-64 { top: 92.75%; left: 94%; }
+    #team-65 { top: 12.5%; left: 12.5%; }
+    #team-66 { top: 18.5%; left: 12.5%; }
+    #team-67 { top: 23.5%; left: 12.5%; }
+    #team-68 { top: 28.75%; left: 12.5%; }
+    #team-69 { top: 34%; left: 12.5%; }
+    #team-70 { top: 39.25%; left: 12.5%; }
+    #team-71 { top: 44.5%; left: 12.5%; }
+    #team-72 { top: 49.85%; left: 12.5%; }
+    #team-73 { top: 55.5%; left: 12.5%; }
+    #team-74 { top: 61%; left: 12.5%; }
+    #team-75 { top: 66%; left: 12.5%; }
+    #team-76 { top: 71%; left: 12.5%; }
+    #team-77 { top: 76%; left: 12.5%; }
+    #team-78 { top: 81.25%; left: 12.5%; }
+    #team-79 { top: 86.5%; left: 12.5%; }
+    #team-80 { top: 92%; left: 12.5%; }
+    #team-81 { top: 12.5%; left: 86%; }
+    #team-82 { top: 18.5%; left: 86%; }
+    #team-83 { top: 23.5%; left: 86%; }
+    #team-84 { top: 28.75%; left: 86%; }
+    #team-85 { top: 34%; left: 86%; }
+    #team-86 { top: 39.25%; left: 86%; }
+    #team-87 { top: 44.5%; left: 86%; }
+    #team-88 { top: 49.85%; left: 86%; }
+    #team-89 { top: 55.5%; left: 86%; }
+    #team-90 { top: 61%; left: 86%; }
+    #team-91 { top: 66%; left: 86%; }
+    #team-92 { top: 71%; left: 86%; }
+    #team-93 { top: 76%; left: 86%; }
+    #team-94 { top: 81.25%; left: 86%; }
+    #team-95 { top: 86.5%; left: 86%; }
+    #team-96 { top: 92%; left: 86%; }
+    #team-97 { top: 15.5%; left: 20.5%; }
+    #team-98 { top: 26%; left: 20.5%; }
+    #team-99 { top: 36.5%; left: 20.5%; }
+    #team-100 { top: 46.75%; left: 20.5%; }
+    #team-101 { top: 58%; left: 20.5%; }
+    #team-102 { top: 68.55%; left: 20.5%; }
+    #team-103 { top: 78.5%; left: 20.5%; }
+    #team-104 { top: 88.8%; left: 20.5%; }
+    #team-105 { top: 15.5%; left: 78%; }
+    #team-106 { top: 26%; left: 78%; }
+    #team-107 { top: 36.5%; left: 78%; }
+    #team-108 { top: 46.75%; left: 78%; }
+    #team-109 { top: 58%; left: 78%; }
+    #team-110 { top: 68.55%; left: 78%; }
+    #team-111 { top: 78.5%; left: 78%; }
+    #team-112 { top: 88.8%; left: 78%; }
+    #team-113 { top: 21.75%; left: 29.5%; }
+    #team-114 { top: 42.75%; left: 29.5%; }
+    #team-115 { top: 64%; left: 29.5%; }
+    #team-116 { top: 84.5%; left: 29.5%; }
+    #team-117 { top: 21.75%; left: 69%; }
+    #team-118 { top: 42.75%; left: 69%; }
+    #team-119 { top: 64.00%; left: 69%; }
+    #team-120 { top: 84.50%; left: 69%; }
+    #team-121 { top: 32.00%; left: 38.5%; }
+    #team-122 { top: 74.50%; left: 38.5%; }
+    #team-123 { top: 32.00%; left: 61%; }
+    #team-124 { top: 74.50%; left: 61%; }
+    #team-125 { top: 46.50%; left: 46.75%; }
+    #team-126 { top: 63.70%; left: 52%; }
+    #team-127 { top: 58.15%; left: 49.55%; }

@@ -1,0 +1,38 @@
+.bracket {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+}
+
+.center-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%; /* Ensure it takes full width */
+}
+
+.bracket-container {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.round {
+    flex: 1;
+    padding: 1rem;
+    border-right: 1px solid #ccc;
+}
+
+.matchup {
+    margin-bottom: 1.5rem;
+}
+
+.team {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0.3rem 0;
+}

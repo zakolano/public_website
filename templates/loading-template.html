@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Training March Madness Prediction Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .loading-container {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .progress-container {
+            margin: 2rem 0;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: #007bff;
+            height: 100%;
+            width: 35%;
+            transition: width 0.5s;
+        }
+        .progress-text {
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        .status-message {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+        }
+        .basketball-container {
+            height: 80px;
+            position: relative;
+            margin: 30px auto;
+            width: 100px;
+        }
+        .basketball {
+            width: 60px;
+            height: 60px;
+            background-color: #e65c00;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+            box-shadow: inset 0 -3px 6px rgba(0,0,0,0.2);
+            animation: bounce 1s infinite ease-in-out;
+        }
+        .shadow {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            animation: shadow 1s infinite ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% {
+                bottom: 0;
+                animation-timing-function: ease-out;
+            }
+            50% {
+                bottom: 30px;
+                animation-timing-function: ease-in;
+            }
+        }
+        @keyframes shadow {
+            0%, 100% {
+                width: 40px;
+                opacity: 0.3;
+            }
+            50% {
+                width: 30px;
+                opacity: 0.1;
+                transform: translateX(-50%) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1>Training Your March Madness Prediction Model</h1>
+        <div class="basketball-container">
+            <div class="shadow"></div>
+            <div class="basketball">
+                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Horizontal center line -->
+                    <line x1="0" y1="30" x2="60" y2="30" stroke="black" stroke-width="3" stroke-opacity="0.7" />
+                    
+                    <!-- Center vertical line -->
+                    <line x1="30" y1="0" x2="30" y2="60" stroke="black" stroke-width="3" stroke-opacity="0.7" />
+                    
+                    <!-- Left curved line -->
+                    <path d="M10,0 C10,20 20,30 10,60" stroke="black" stroke-width="3" stroke-opacity="0.7" fill="none" />
+                    
+                    <!-- Right curved line -->
+                    <path d="M50,0 C50,20 40,30 50,60" stroke="black" stroke-width="3" stroke-opacity="0.7" fill="none" />
+                </svg>
+            </div>
+        </div>
+        <p>Please wait while we analyze the data and generate your predictions...</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">0%</div>
+        <div class="status-message" id="statusMessage">Initializing...</div>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const statusMessage = document.getElementById('statusMessage');
+        const sessionId = "{{ session_id }}";
+        
+        // Start the training process via API call
+        fetch(`/start_training/${sessionId}`, {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => console.log('Training started:', data))
+        .catch(error => console.error('Error starting training:', error));
+        
+        // Connect to WebSocket
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${protocol}//${window.location.host}/ws/${sessionId}`);
+        
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const progress = data.progress;
+            const status = data.status || '';
+            
+            // Update progress bar
+            progressBar.style.width = progress + '%';
+            progressText.innerText = progress + '%';
+            
+            // Update status message
+            if (status) {
+                statusMessage.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+            
+            // Redirect to results page when complete
+            if (progress >= 100) {
+                setTimeout(() => {
+                    window.location.href = '/results';
+                }, 1500);
+            }
+            
+            // Show error if something went wrong
+            if (progress < 0) {
+                progressBar.style.backgroundColor = '#dc3545';
+                statusMessage.style.color = '#dc3545';
+            }
+        };
+        
+        ws.onclose = function(event) {
+            console.log('Connection closed');
+            statusMessage.innerText = 'Connection lost. Please refresh the page.';
+        };
+    </script>
+</body>
+</html>
